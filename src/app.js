@@ -1,9 +1,48 @@
-document.addEventListener('alpine.init', () => {
+document.addEventListener('alpine:init', () => {
     Alpine.data('product', () => ({
         items: [
-            {id: 1, name:'Product 1', img: 'img/product-1.jpg', price: 100, stock: 10, qty: 1},
-            {id: 2, name:'Product 2', img: 'img/product-2.jpg', price: 200, stock: 5, qty: 1},
-            {id: 3, name:'Product 3', img: 'img/product-3.jpg', price: 300, stock: 0, qty: 1},
-            {id: 4, name:'Product 4', img: 'img/product-4.jpg', price: 400, stock: 2, qty: 1},
-            {id: 5, name:'Product 5', img: 'img/product-5.jpg', price: 500, stock: 8, qty: 1},
-        ]
+            {id: 1, name:'Kursi Roda', img:'kursiroda.jpg', price: 800000},
+            {id: 2, name:'Termometer', img:'termometer.jpg', price: 50000},
+            {id: 3, name:'Termogun', img:'termogun.jpg', price: 450000},
+            {id: 4, name:'Digital Tensimeter', img:'digtensimeter.jpg', price: 800000},
+            {id: 5, name:'Stetoskop', img:'stetoskop.jpg', price: 300000},
+        ],
+    }));
+    
+
+    Alpine.store('cart', {
+        items: [],
+        total: 0,
+        quantity: 0,
+        add(newItem){
+            const cartItem = this.items.find((item) => item.id === newItem.id);
+            if(!cartItem){ 
+            this.items.push({...newItem, quantity: 0, total: newItem.price});
+            this.quantity++;
+            this.total += newItem.price;
+            } else {
+                this.items = this.items.map((item) => {
+                    if (item.id !== newItem.id){
+                        return item;
+                    } else {
+                        item.quantity++;
+                        item.total = item.price*item.quantity;
+                        this.quantity++;
+                        this.total += item.price;
+                        return item;
+                    }
+                });
+            }
+        },
+    });
+});
+
+
+// konv rp
+const rupiah = (number) => {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(number);
+};

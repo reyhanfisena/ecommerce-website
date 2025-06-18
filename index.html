@@ -6,12 +6,13 @@
     <title>Ecommerce Website</title>
 
     <script src="https://unpkg.com/feather-icons"></script>
-
     <link rel="stylesheet" href="css/style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="src/app.js"></script>
 </head>
 <body>
 
-    <nav class="navbar">
+    <nav class="navbar" x-data>
         <a href="#" class="logo">Ecommerce</a>
 
         <div class="navbar-nav">
@@ -23,7 +24,10 @@
 
         <div class="navbar-icons">
             <a href="#" id="search-btn"><i data-feather="search"></i></a>
-            <a href="#" id="shopping-cart-btn"><i data-feather="shopping-cart"></i></a>
+            <a href="#" id="shopping-cart-btn">
+                <i data-feather="shopping-cart"></i>
+                <span class="quantity-badge" x-show="$store.cart.quantity" x-text="$store.cart.quantity"></span>
+            </a>
             <a href="#" id="menu"><i data-feather="menu"></i></a>
         </div>
         <!-- search -->
@@ -36,22 +40,21 @@
         
         <!-- cart -->
         <div class="shopping-cart">
+            <template x-for="(item, index)in $store.cart.item" x-key="index">
             <div class="cart-item">
-                <img src="" alt="produk 1">
-                <div class="cart-item-details">
-                    <h3>Produk 1</h3>
-                    <div class="item-price">Rp. 100.000</div>
+                    <img :src="`img/product/${item.img}`" :alt="item.name">
+                    <div class="cart-item-details">
+                        <h3 x-text="item.name"></h3>
+                        <div class="item-price">
+                            <span x-text="rupiah(item.price)"></span>&times;
+                            <button id="remove">&minus;</button>
+                            <span x-text="item.quantity"></span>
+                            <button id="add">&plus;</button>
+                            <span x-text="item.total"></span>
+                        </div>
+                    </div>
                 </div>
-                <i data-feather="trash-2" class="rmv-item"></i>
-            </div>
-            <div class="cart-item">
-                <img src="" alt="produk 2">
-                <div class="cart-item-details">
-                    <h3>Produk 2</h3>
-                    <div class="item-price">Rp. 150.000</div>
-                </div>
-                <i data-feather="trash-2" class="rmv-item"></i>
-            </div>
+            </template>
         </div>
                 
             </nav>
@@ -84,108 +87,51 @@
 <!--about end-->
 </section>
 
-<section id="product" class="product">
+<section class="product" id="product" x-data="product">
     <h2>Produk Kami</h2>
     <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias quam repellendus architecto nulla molestiae, nesciunt ad adipisci corrupti fugit sapiente?</p>
     
     <div class="row">
-        <div class="product-card">
-            <div class="product-icon">
-                <a href="#">
-                    <i data-feather="shopping-cart"></i>
-                </a>
-                <a href="#" class="detail-btn">
-                    <i data-feather="eye"></i>
-                </a>
-            </div>
-            <div class="product-img">
-            <img  src="https://source.unsplash.com/300x200/?electronics" alt="Produk 1" class="product-card-img">
-            </div>
-            <div class="product-content">
-                <h3>Produk 1</h3>
-                <div class="product-stars">
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
+        <template x-for="(item, index) in items" x-key="index">
+            <div class="product-card">
+                <div class="product-icon">
+                    <a href="#"@click.prevent="$store.cart.add(item)">
+                        <svg
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        >
+                        <use href="img/feather-sprite.svg#shopping-cart" />
+                        </svg>
+                    </a>
+                    <a href="#" class="detail-btn">
+                <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                >
+                <use href="img/feather-sprite.svg#eye" />
+                </svg>
+                    </a>
                 </div>
-                <div class="product-price">Rp. <span>Rp. </span></div>
-            </div>
-        </div>
-                <div class="product-card">
-            <div class="product-icon">
-                <a href="#">
-                    <i data-feather="shopping-cart"></i>
-                </a>
-                <a href="#">
-                    <i data-feather="eye"></i>
-                </a>
-            </div>
-            <div class="product-img">
-            <img  src="https://source.unsplash.com/300x200/?electronics" alt="Produk 2" class="product-card-img">
-            </div>
-            <div class="product-content">
-                <h3>Produk 1</h3>
-                <div class="product-stars">
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
+                <div class="product-img">
+                    <img :src="`img/product/${item.img}`" :alt="item.name">
                 </div>
-                <div class="product-price">Rp. <span>Rp. </span></div>
+                <div class="product-content">
+                    <h3 x-text="item.name"></h3>
+                <div class="product-price" x-text="rupiah(item.price)"></div>
             </div>
         </div>
-                <div class="product-card">
-            <div class="product-icon">
-                <a href="#">
-                    <i data-feather="shopping-cart"></i>
-                </a>
-                <a href="#">
-                    <i data-feather="eye"></i>
-                </a>
-            </div>
-            <div class="product-img">
-            <img  src="https://source.unsplash.com/300x200/?electronics" alt="Produk 3" class="product-card-img">
-            </div>
-            <div class="product-content">
-                <h3>Produk 1</h3>
-                <div class="product-stars">
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                </div>
-                <div class="product-price">Rp. <span>Rp. </span></div>
-            </div>
-        </div>
-                <div class="product-card">
-            <div class="product-icon">
-                <a href="#">
-                    <i data-feather="shopping-cart"></i>
-                </a>
-                <a href="#">
-                    <i data-feather="eye"></i>
-                </a>
-            </div>
-            <div class="product-img">
-            <img  src="https://source.unsplash.com/300x200/?electronics" alt="Produk 4" class="product-card-img">
-            </div>
-            <div class="product-content">
-                <h3>Produk 1</h3>
-                <div class="product-stars">
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                    <i data-feather="star"></i>
-                </div>
-                <div class="product-price">Rp. <span>Rp. </span></div>
-            </div>
-        </div>
-        </div>
+    </template>
+    </div>
 </section>
 <!--product end-->
 
@@ -262,7 +208,6 @@
     <script>
       feather.replace();
     </script>
-
     <script src="js/script.js"></script>
 </body>
 </html>
