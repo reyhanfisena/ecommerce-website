@@ -143,6 +143,7 @@ html {
 
 .shopping-cart img {
     height: 4rem;
+    width: 4rem;
 }
 
 .shopping-cart h3 {
@@ -167,6 +168,29 @@ font-weight: bold;
 font-size: 1.1rem;
 }
 
+.shopping-cart h4{
+    font-size: 1.6rem;
+    margin-top: -1rem;
+    text-align: center;
+
+}
+
+.form-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.form-container .checkout-btn{
+    padding: 6px 14px;
+    background-color: royalblue;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 20px;
+    margin: 1rem;
+    cursor: pointer;
+}
 
 /* Hero Section */
 .hero {
@@ -308,6 +332,7 @@ font-size: 1.1rem;
 
 .product .product-img img {
     height: 25rem;
+    width: 25rem;
 }
 
 .product .product-content h3{

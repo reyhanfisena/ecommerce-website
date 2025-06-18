@@ -15,9 +15,10 @@ document.addEventListener('alpine:init', () => {
         total: 0,
         quantity: 0,
         add(newItem){
+            //cek barang
             const cartItem = this.items.find((item) => item.id === newItem.id);
             if(!cartItem){ 
-            this.items.push({...newItem, quantity: 0, total: newItem.price});
+            this.items.push({...newItem, quantity: 1, total: newItem.price});
             this.quantity++;
             this.total += newItem.price;
             } else {
@@ -28,12 +29,35 @@ document.addEventListener('alpine:init', () => {
                         item.quantity++;
                         item.total = item.price*item.quantity;
                         this.quantity++;
-                        this.total += item.price;
+                        this.total += cartItem.price;
                         return item;
                     }
                 });
             }
         },
+        remove(id) {
+            const cartItem =this.items.find((item) => item.id ===id);
+
+            if(cartItem.quantity > 1){
+                this.items = this.items.map((item) =>{
+                    if(item.id =! id){
+                        return item;
+                     }
+                     else {
+                        item.quantity--;
+                        item.total = item.price * item.quantity;
+                        this.quantity--;
+                        this.total -= cartItem.price;
+                        return item;
+                    }
+                })
+                
+            }  else if (cartItem.quantity === 1){
+                        this.items = this.items.filter((item) => item.id !== id);
+                        this.quantity--;
+                        this.total -= cartItem.price;
+                     }
+        }
     });
 });
 
